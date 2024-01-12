@@ -202,7 +202,7 @@ function getNetParam() {
             };
         }
     }
-    return null;
+    return { mode: "browser", param: undefined }
 }
 
 function genmac(){

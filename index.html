@@ -27,12 +27,12 @@
 
       var nwStack;
       var netParam = getNetParam();
-      var workerImage = location.origin + "/debian.wasm";
+      var workerImage = location.origin + "/wasm/alpine.wasm";
       if (netParam) {
           if (netParam.mode == 'delegate') {
               nwStack = delegate(worker, workerImage, netParam.param);
           } else if (netParam.mode == 'browser') {
-              nwStack = newStack(worker, workerImage, new Worker("./stack-worker.js"+location.search), location.origin + "/c2w-net-proxy.wasm");
+              nwStack = newStack(worker, workerImage, new Worker("./stack-worker.js"+location.search), location.origin + "/wasm/c2w-net-proxy.wasm");
           }
       }
       if (!nwStack) {
@@ -51,7 +51,7 @@
                   };
               }
           }
-          return null;
+          return { mode: "browser", param: undefined }
       }
     </script>
   </body>
