@@ -1,0 +1,58 @@
+<html>
+  <head>
+    <title>container + WASI on browser</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@4.17.0/css/xterm.css">
+  </head>
+  <body>
+    <div id="terminal"></div>
+    <script src="https://cdn.jsdelivr.net/npm/xterm@4.17.0/lib/xterm.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xterm-pty@0.9.4/index.js"></script>
+    <script src="./stack.js"></script>
+    <script src="./ws-delegate.js"></script>
+    <script>
+      const xterm = new Terminal();
+      xterm.open(document.getElementById("terminal"));
+
+      const { master, slave } = openpty();
+
+      termios = slave.ioctl("TCGETS");
+      termios.iflag &= ~(/*IGNBRK | BRKINT | PARMRK |*/ ISTRIP | INLCR | IGNCR | ICRNL | IXON);
+      termios.oflag &= ~(OPOST);
+      termios.lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
+      //termios.cflag &= ~(CSIZE | PARENB);
+      //termios.cflag |= CS8;
+      slave.ioctl("TCSETS", new Termios(termios.iflag, termios.oflag, termios.cflag, termios.lflag, termios.cc));
+      xterm.loadAddon(master);
+      const worker = new Worker("./worker.js"+location.search);
+
+      var nwStack;
+      var netParam = getNetParam();
+      var workerImage = location.origin + "/debian.wasm";
+      if (netParam) {
+          if (netParam.mode == 'delegate') {
+              nwStack = delegate(worker, workerImage, netParam.param);
+          } else if (netParam.mode == 'browser') {
+              nwStack = newStack(worker, workerImage, new Worker("./stack-worker.js"+location.search), location.origin + "/c2w-net-proxy.wasm");
+          }
+      }
+      if (!nwStack) {
+          worker.postMessage({type: "init", imagename: workerImage});
+      }
+      new TtyServer(slave).start(worker, nwStack);
+
+      function getNetParam() {
+          var vars = location.search.substring(1).split('&');
+          for (var i = 0; i < vars.length; i++) {
+              var kv = vars[i].split('=');
+              if (decodeURIComponent(kv[0]) == 'net') {
+                  return {
+                      mode: kv[1],
+                      param: kv[2],
+                  };
+              }
+          }
+          return null;
+      }
+    </script>
+  </body>
+</html>
