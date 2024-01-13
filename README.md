@@ -29,5 +29,13 @@ https://example.com {
   header Cross-Origin-Opener-Policy same-origin
   header Cross-Origin-Embedder-Policy require-corp
   header Access-Control-Allow-Origin *
+  encode gzip zstd {
+    match {
+      header Content-Type application/wasm*
+      header Content-Type application/json*
+      header Content-Type application/javascript*
+      header Content-Type text/*
+    }
+  }
 }
 ```
