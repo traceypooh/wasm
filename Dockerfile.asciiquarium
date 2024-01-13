@@ -1,0 +1,3 @@
+FROM docker.io/alpine
+RUN apk add asciiquarium
+CMD /usr/bin/asciiquarium
