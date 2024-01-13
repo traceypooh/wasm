@@ -40,7 +40,7 @@
       let WASM = 'alpine.wasm'
       for (const args of location.search.substring(1).split('&')) {
           const kv = args.split('=');
-          if (decodeURIComponent(kv[0]) == 'wasm')
+          if (decodeURIComponent(kv[0]) === 'wasm' && kv[1].match(/^[a-z0-9_-]+\.wasm$/i))
             WASM = kv[1]
       }
       fetch('./wasm/').then((e) => e.text()).then((txt) => {
