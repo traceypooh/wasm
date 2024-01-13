@@ -5,26 +5,33 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@4.17.0/css/xterm.css">
   </head>
   <body>
-    <h1 style="text-align:center">
-      docker containers, compiled into WASM, using JS in a browser
-    </h1>
-    examples can take a minute or so to load since even small docker images expand a bit, examples:
-    <ul>
-      <li>7MB 'alpine' docker linux image => 96MB .wasm file</li>
-      <li>117MB 'debian:bookworm' linux image => 189MB .wasm file</li>
-      <li>52MB 'python:3-alpine' image => 138MB .wasm file</li>
-      <li>See more demo sizes <a href="./wasm/">here</a></li>
-    </ul>
+    <div class="container">
+      <h1>
+        Docker containers, compiled into WASM, using JS in the browser
+      </h1>
+      <p>
+        <a href="https://github.com/traceypooh/wasm">Source code on github</a>
+        (uses <a href="https://github.com/ktock/container2wasm">container2wasm</a>).
+      </p>
+      Examples can take a minute or so to load since even small docker images expand a bit, examples:
+      <ul>
+        <li>7MB 'alpine' docker linux image => 96MB .wasm file</li>
+        <li>117MB 'debian:bookworm' linux image => 189MB .wasm file</li>
+        <li>52MB 'python:3-alpine' image => 138MB .wasm file</li>
+        <li>See more demo sizes <a href="./wasm/">here</a></li>
+      </ul>
 
-    <i>Presently defaulting to networking via browser `fetch()` which requires CORS open responses for requested urls.</i>
-    <p>
-      For a networking "out" example, try the `alpine` demo and:
-    </p>
-    <code>
-      wget -qO- https://esm.archive.org/jquery
-    </code>
+      <i>Presently defaulting to networking via browser `fetch()` which requires CORS open responses for requested urls.</i>
+      <p>
+        For a networking "out" example, try the `alpine` demo and:
+      </p>
+      <code>
+        wget -qO- https://esm.archive.org/jquery
+      </code>
 
-    <div id="terminal"></div>
+      <div id="terminal"></div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/xterm@4.17.0/lib/xterm.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/xterm-pty@0.9.4/index.js"></script>
     <script src="./stack.js"></script>
