@@ -46,7 +46,7 @@
       fetch('./wasm/').then((e) => e.text()).then((txt) => {
         let htm = `<hr><b>Pick a wasm image (defaults to ${WASM}):</b>`
         for (const wasm of [...txt.matchAll(/([^/]+\.wasm)"/gi)].map((e) => e[1])
-          .filter((e) => e !== 'c2w-net-proxy.wasm')) {
+          .filter((e) => e !== 'c2w-net-proxy.wasm').sort()) {
           htm += `<li><a href="${location.origin}?wasm=${wasm}">${wasm}</a></li>`
         }
         const el = document.createElement('ul')
