@@ -203,7 +203,7 @@ function getNetParam() {
         }
     }
     // return { mode: "browser", param: undefined } // CORS option
-    return { mode: "delegate", param: `wss://:${location.hostname}:8080` }
+    return { mode: "delegate", param: `wss://${location.hostname}:8080` }
 }
 
 function genmac(){
