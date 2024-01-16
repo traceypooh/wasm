@@ -21,12 +21,12 @@
         <li>See more demo sizes <a href="./wasm/">here</a></li>
       </ul>
 
-      <i>Presently defaulting to networking via browser `fetch()` which requires CORS open responses for requested urls.</i>
+      <i>This presently uses a networking sidecar `wss://` service to allow the container to talk to the "real world".</i>
       <p>
         For a networking "out" example, try the `alpine` demo and:
       </p>
       <code>
-        wget -qO- https://esm.archive.org/jquery
+        apk add emacs
       </code>
 
       <div id="terminal"></div>
@@ -37,12 +37,14 @@
     <script src="./stack.js"></script>
     <script src="./ws-delegate.js"></script>
     <script>
+      // figure out which .wasm file/image we're using
       let WASM = 'alpine.wasm'
       for (const args of location.search.substring(1).split('&')) {
           const kv = args.split('=');
           if (decodeURIComponent(kv[0]) === 'wasm' && kv[1].match(/^[a-z0-9_-]+\.wasm$/i))
             WASM = kv[1]
       }
+      // parse dir listing of `wasm/` - determines the `.wasm` files available to list/choose
       fetch('./wasm/').then((e) => e.text()).then((txt) => {
         let htm = `<hr><b>Pick a wasm image (defaults to ${WASM}):</b>`
         for (const wasm of [...txt.matchAll(/([^/]+\.wasm)"/gi)].map((e) => e[1])
@@ -95,7 +97,8 @@
                   };
               }
           }
-          return { mode: "browser", param: undefined }
+          // return { mode: "browser", param: undefined } // CORS option
+          return { mode: "delegate", param: `wss://:${location.hostname}:8080` }
       }
     </script>
   </body>
