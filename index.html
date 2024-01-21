@@ -67,7 +67,7 @@
         el.innerHTML = htm
         document.getElementById('terminal').before(el)
       })
-      fetch('./wasm/').then((e) => e.text()).then((txt) => {
+      fetch('wasm/').then((e) => e.text()).then((txt) => {
         wasm_picker([...txt.matchAll(/([^/]+\.wasm)"/gi)].map((e) => e[1])
           .filter((e) => e !== 'c2w-net-proxy.wasm').sort())
         // if we fail to get a directory listing (eg: GitHub Pages deploy), use repo's single wasm
