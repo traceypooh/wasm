@@ -9,6 +9,7 @@ This repo is a port and slight expansion of
 ## Buidling `.wasm` files
 NOTE: This doubles the standard ~53MB VM size to ~120MB (`128` is the default)
 ```sh
+# https://github.com/ktock/container2wasm/blob/main/Dockerfile
 ./c2w  --build-arg VM_MEMORY_SIZE_MB=256  busybox  wasm/busybox.wasm
 ```
 
