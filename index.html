@@ -21,8 +21,21 @@
         <li>See more demo sizes <a href="./wasm/">here</a></li>
       </ul>
 
-      <i>This presently uses a networking sidecar `wss://` service to allow the container to talk to the "real world".</i>
+      <h2>Networking</h2>
       <p>
+        For GitHub Pages (*.github.io) we using a `fetch()` based networking shim.  Anything requested from the live network needs to be CORS open/friendly.<br>
+        For a networking "out" example, try the `alpine` demo and:
+      </p>
+      <code>
+        wget -qO- https://esm.archive.org/jquery
+      </code>
+
+      <hr/>
+      <p>
+        For local installations or setups that can use the `c2w-net` sidecar proxy
+        (runs on backend. next to the static file webserver for this demo),
+        this otherwise defaults to using a
+        networking sidecar `wss://` service to allow the container to talk to the "real world".<br>
         For a networking "out" example, try the `alpine` demo and:
       </p>
       <code>
@@ -49,7 +62,7 @@
       const wasm_picker = ((wasms) => {
         let htm = `<hr><b>Pick a wasm image (defaults to ${WASM}):</b>`
         for (const wasm of wasms)
-          htm += `<li><a href="${location.origin}?wasm=${wasm}">${wasm}</a></li>`
+          htm += `<li><a href="?wasm=${wasm}">${wasm}</a></li>`
         const el = document.createElement('ul')
         el.innerHTML = htm
         document.getElementById('terminal').before(el)
@@ -77,12 +90,12 @@
 
       var nwStack;
       var netParam = getNetParam();
-      var workerImage = `${location.origin}/wasm/${WASM}`
+      var workerImage = `wasm/${WASM}`
       if (netParam) {
           if (netParam.mode == 'delegate') {
               nwStack = delegate(worker, workerImage, netParam.param);
           } else if (netParam.mode == 'browser') {
-              nwStack = newStack(worker, workerImage, new Worker("./stack-worker.js"+location.search), location.origin + "/wasm/c2w-net-proxy.wasm");
+              nwStack = newStack(worker, workerImage, new Worker("./stack-worker.js"+location.search), "wasm/c2w-net-proxy.wasm");
           }
       }
       if (!nwStack) {
@@ -101,7 +114,7 @@
                   };
               }
           }
-          return location.host.endsWith('.github.io')
+          return location.hostname === 'localhost' || location.host.endsWith('.github.io')
             ? { mode: "browser", param: undefined } // CORS option
             : { mode: "delegate", param: `wss://${location.hostname}:8080` }
       }
