@@ -6,6 +6,9 @@ This repo is a port and slight expansion of
 - https://github.com/ktock/container2wasm/tree/main/examples/wasi-browser/htdocs
 
 
+[![.github/workflows/workflow.yml](https://github.com/traceypooh/wasm/actions/workflows/workflow.yml/badge.svg)](https://github.com/traceypooh/wasm/actions/workflows/workflow.yml)
+
+
 ## Buidling `.wasm` files
 NOTE: This doubles the standard ~53MB VM size to ~120MB (`128` is the default)
 ```sh
