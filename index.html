@@ -46,16 +46,19 @@
             WASM = kv[1]
       }
       // parse dir listing of `wasm/` - determines the `.wasm` files available to list/choose
-      fetch('./wasm/').then((e) => e.text()).then((txt) => {
+      const wasm_picker = ((list) => {
         let htm = `<hr><b>Pick a wasm image (defaults to ${WASM}):</b>`
-        for (const wasm of [...txt.matchAll(/([^/]+\.wasm)"/gi)].map((e) => e[1])
-          .filter((e) => e !== 'c2w-net-proxy.wasm').sort()) {
+        for (const wasm of wasms)
           htm += `<li><a href="${location.origin}?wasm=${wasm}">${wasm}</a></li>`
-        }
         const el = document.createElement('ul')
         el.innerHTML = htm
         document.getElementById('terminal').before(el)
       })
+      fetch('./wasm/').then((e) => e.text()).then((txt) => {
+        wasm_picker([...txt.matchAll(/([^/]+\.wasm)"/gi)].map((e) => e[1])
+          .filter((e) => e !== 'c2w-net-proxy.wasm').sort())
+        // if we fail to get a directory listing (eg: GitHub Pages deploy), use repo's single wasm
+      }).error(() => wasm_picker(['alpine.wasm']))
 
       const xterm = new Terminal();
       xterm.open(document.getElementById("terminal"));
