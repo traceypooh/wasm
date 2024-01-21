@@ -23,7 +23,7 @@ These files can all be served *statically* with just about any webserver for a w
 ### localhost example
 This example uses `deno` but other web servers will work
 ```sh
-deno run --allow-read --allow-net https://deno.land/std/http/file_server.ts --cors -H 'Cross-Origin-Opener-Policy: same-origin' -H 'Cross-Origin-Embedder-Policy: require-corp'
+deno run --allow-read --allow-net https://deno.land/std/http/file_server.ts
 ```
 
 ### Caddyfile setup example

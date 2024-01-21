@@ -202,8 +202,9 @@ function getNetParam() {
             };
         }
     }
-    // return { mode: "browser", param: undefined } // CORS option
-    return { mode: "delegate", param: `wss://${location.hostname}:8080` }
+    return location.host.endsWith('.github.io')
+        ? { mode: "browser", param: undefined } // CORS option
+        : { mode: "delegate", param: `wss://${location.hostname}:8080` }
 }
 
 function genmac(){
